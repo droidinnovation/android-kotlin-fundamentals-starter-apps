@@ -16,7 +16,33 @@
 
 package com.example.android.trackmysleepquality.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
-interface SleepDatabaseDao
+interface SleepDatabaseDao {
+
+    @Insert
+    fun insert(night: SleepNight)
+
+    @Update
+    fun update(night: SleepNight)
+
+    @Query("SELECT * FROM daily_sleep_quality_table WHERE nightId = :key")
+    fun get(key: Long): SleepNight?
+
+    //The @Delete annotation deletes one item, and you could use @Delete and supply a list of nights to delete.
+    // The drawback is that you need to fetch or know what's in the table.
+    // The @Delete annotation is great for deleting specific entries, but not efficient for clearing all entries from a table.
+    @Query("DELETE FROM daily_sleep_quality_table")
+    fun clear()
+
+    @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC LIMIT 1")
+    fun getTonight(): SleepNight?
+
+    @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC")
+    fun getAllNights(): LiveData<List<SleepNight>>
+}
