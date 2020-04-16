@@ -113,7 +113,9 @@ class SleepTrackerFragment : Fragment() {
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             //whenever you get a non-null value (for nights), assign the value to the adapter's data.
             it?.let {
-                adapter.data = it
+                //adapter.data = it
+                //ListAdapter provides a method called submitList() to tell ListAdapter that a new version of the list is available
+                adapter.submitList(it)
             }
         })
 
